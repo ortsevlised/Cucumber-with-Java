@@ -37,5 +37,5 @@ so if you want to use another driver make sure the paths are properly set up in 
 There's also package called `TestWithoutCucumber`
 There you will find the same test using Selenium only with TestNG.
 
-From the IDE select the @Test annotation within the Test class and Run with TestNG, if you don't have the plugin please
-download it or just change the annotation import to JUnit, delete the description from the annotation and run it with JUnit. 
+From the IDE go to the Test class and select the @Test annotation over the `addingItemToCart` method and select 'Run with TestNG', if you don't have the plugin please
+download it or just change the annotations import to use JUnit.
