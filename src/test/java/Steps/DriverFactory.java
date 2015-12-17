@@ -14,7 +14,7 @@ import java.io.File;
 public class DriverFactory {
 
     protected static WebDriver driver;
-    private static String CHROME_DRIVER = "D:\\development\\cucumber-java-test\\drivers\\chromedriver.exe";
+    private static String CHROME_DRIVER = "src/chromedriver.exe";
 
     public DriverFactory() {
         initialize();
@@ -31,7 +31,7 @@ public class DriverFactory {
     /**
      * Chooses the proper driver and deletes all cookies at the start of each scenario to avoid
      * shared state between tests
-     * //TODO add support for remote webdriver, more drivers,appium, maybe sauceslab, etc...
+     * //TODO add support for remote webdriver, more drivers,appium, maybe sauceslab, capabilities, etc...
      */
     public void createNewDriverInstance() {
         String browser = new PropertyReader().readProperty("browser");
