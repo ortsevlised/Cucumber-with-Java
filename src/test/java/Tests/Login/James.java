@@ -3,38 +3,44 @@ package Tests.Login;
 import Pages.LoginPage;
 import Pages.MatchingDriver;
 import Pages.WebDriverFactory;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import static Pages.ElementCriteria.hasText;
 import static Pages.ElementCriteria.isDisabled;
 import static Pages.ElementCriteria.isEnabled;
+import static org.hamcrest.CoreMatchers.containsString;
 
 public class James {
 
+    public static final String LOGIN_EMAIL = "identity11@gmail.com";
+    public static final String LOGIN_PASSWORD = "password12";
     static MatchingDriver matchingDriver = new MatchingDriver(WebDriverFactory.webdriver());
     static LoginPage loginPage;
 
 
-    @BeforeTest
+    @BeforeMethod
     public static void startUpTest() {
         loginPage = new LoginPage(matchingDriver);
         loginPage.navigateToMockClient();
     }
 
 
-    @Test(dataProvider="providerEmailAndPassword")
-    public void testLoginButtonIsDisabledWhenUsernameOrPasswordIsEmpty(String email,String password) throws Exception {
+    @Test(dataProvider = "providerEmailAndPassword")
+    public void testLoginButtonIsDisabledWhenUsernameOrPasswordIsEmpty(String email, String password) throws Exception {
         logInUserWithEmailScope(email, password);
-        loginPage.loginButton(isDisabled());
+        loginPage.loginBtn(isDisabled());
     }
 
 
     @Test
     public void testSuccesfulLogOut() throws Exception {
-        logInUserWithEmailScope("identity11@gmail.com", "password12");
-        loginPage.loginButton(isDisabled());
-
+        logInUserWithEmailScope(LOGIN_EMAIL, LOGIN_PASSWORD);
+        loginPage.userDetails(hasText(containsString("email: " + LOGIN_EMAIL)));
+        loginPage.userDetails(hasText(containsString("has your email been verified?: false")));
+        loginPage.logOutBtn(isEnabled()).click();
+        loginPage.userDetails(hasText(containsString("Mock Author Submissions")));
     }
 
 
@@ -42,19 +48,14 @@ public class James {
         loginPage.selectLogInWithEmailScope();
         loginPage.enterLogin(login);
         loginPage.enterPassword(password);
-        loginPage.loginButton(isEnabled()).click();
-    }
-
-    private void assertLoginButtonIsDisabledForLoginAndPassword(String login, String password) {
-
-        //page.loginButton(allOf(isDisabled(), hasText(equalTo("Invalid!"))));
+        loginPage.loginBtn(isEnabled()).click();
     }
 
     @DataProvider
     public static Object[][] providerEmailAndPassword() {
-        return new Object[][] {
-                { "email@mail.com", "" },
-                { "","password12" }
+        return new Object[][]{
+                {LOGIN_EMAIL, ""},
+                {"", LOGIN_PASSWORD}
         };
     }
 
