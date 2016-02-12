@@ -1,4 +1,4 @@
-package Pages;
+package Util;
 
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Description;
@@ -31,7 +31,7 @@ public class ElementCriteria {
         return new TypeSafeMatcher<WebElement>() {
             @Override
             protected boolean matchesSafely(WebElement item) {
-                return ! item.isEnabled();
+                return !item.isEnabled();
             }
 
             @Override
@@ -51,6 +51,34 @@ public class ElementCriteria {
             @Override
             public void describeTo(Description description) {
                 description.appendText("is enabled");
+            }
+        };
+    }
+
+    public static Matcher<WebElement> isChecked() {
+        return new TypeSafeMatcher<WebElement>() {
+            @Override
+            protected boolean matchesSafely(WebElement item) {
+                return item.isSelected();
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("is already checked");
+            }
+        };
+    }
+
+    public static Matcher<WebElement> isNotChecked() {
+        return new TypeSafeMatcher<WebElement>() {
+            @Override
+            protected boolean matchesSafely(WebElement item) {
+                return !item.isSelected();
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("is not checked");
             }
         };
     }

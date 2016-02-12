@@ -1,9 +1,11 @@
-package Pages;
+package Util;
 
-import Util.PropertyReader;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriverService;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 
 import java.io.File;
@@ -17,7 +19,6 @@ public class WebDriverFactory {
 
         if (driver == null) {
             createNewDriverInstance();
-
 
             Runtime.getRuntime().addShutdownHook(new Thread() {
                 @Override
@@ -44,20 +45,34 @@ public class WebDriverFactory {
             case "chrome":
                 setDriverProperty("webdriver.chrome.driver", CHROME_DRIVER);
                 driver = new ChromeDriver();
+
                 break;
             case "firefox":
                 // setDriverProperty("webdriver.firefox.bin", FIREFOX_DRIVER);
                 driver = new FirefoxDriver();
                 break;
+
+            case "phantomjs":
+                DesiredCapabilities caps = new DesiredCapabilities();
+                caps.setJavascriptEnabled(true);
+                caps.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS, new String[]{"--web-security=no", "--ignore-ssl-errors=yes"});
+                caps.setCapability("acceptSslCerts", true);
+                driver = new PhantomJSDriver(caps);
+                break;
             default:
                 System.out.println("That browser is not detected, defaulting to chrome");
                 setDriverProperty("webdriver.chrome.driver", CHROME_DRIVER);
                 driver = new ChromeDriver();
+
         }
         driver.manage().deleteAllCookies();
         driver.manage().window().maximize();
     }
 
+    public static void destroyDriver() {
+        driver.quit();
+        driver = null;
+    }
 
     /**
      * Method to set the driver location property key for the desired browser
